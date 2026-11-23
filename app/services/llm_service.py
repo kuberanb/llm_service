@@ -175,7 +175,6 @@ async def stream_llm_response(
 
             llm_result = final_response.output_parsed
 
-
             if llm_result is None:
                 raise LLMException(502,"The AI returned an empty response")
 
@@ -186,7 +185,6 @@ async def stream_llm_response(
             yield{
                 "type": "completed",
                 "response":llm_result.model_dump(),
-
             }
 
     except APITimeoutError:
