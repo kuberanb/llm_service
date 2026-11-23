@@ -164,7 +164,7 @@ async def stream_llm_response(
         ) as stream :
             async for event in stream:
 
-                if type == "response.output_text.delta":
+                if event.type == "response.output_text.delta":
                     yield {
                         "type": "delta",
                         "text":event.delta
