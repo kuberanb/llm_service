@@ -1,22 +1,34 @@
+from pydantic import BaseModel, Field, ConfigDict
 
-
-from pydantic import BaseModel
 
 class LLMResponse(BaseModel):
-    answer : str
-    summary : str
-    key_points: list[str]
+
+    model_config = ConfigDict(extra="forbid")
+
+    answer: str
+
+    summary: str
+
+    key_points: list[str] = Field(
+        min_length=1
+    )
 
 
 class UsageInfo(BaseModel):
 
-    input_tokens: int
-    output_tokens: int 
-    total_tokens: int
-    estimated_cost:float
+    input_tokens: int = Field(ge=0)
+
+    output_tokens: int = Field(ge=0)
+
+    total_tokens: int = Field(ge=0)
+
+    is_estimated: bool = False
 
 
 class GenerateResponse(BaseModel):
-    reponse: LLMResponse
+
+    response: LLMResponse
+
     usage: UsageInfo
-    model_used : str
+
+    model_used: str
