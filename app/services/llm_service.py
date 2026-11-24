@@ -246,6 +246,7 @@ async def generate_llm_response(
                 return GenerateResponse(
                     response=llm_result,
                     usage=usage,
+                    model_used=model,
                 )
 
             # Rate limit: move to fallback
