@@ -110,23 +110,27 @@ def get_usage(response) -> UsageInfo:
 # --------------------------------------------------
 
 async def call_model(
-    message: str,
+    messages: list,
     model: str,
     max_output_tokens: int = 1000,
 ):
 
     response = await client.responses.parse(
         model=model,
-        input=[
-            {
-                "role": "system",
-                "content": SYSTEM_INSTRUCTIONS,
-            },
-            {
-                "role": "user",
-                "content": message,
-            },
-        ],
+        input=messages
+        
+        # [
+        #     {
+        #         "role": "system",
+        #         "content": SYSTEM_INSTRUCTIONS,
+        #     },
+        #     {
+        #         "role": "user",
+        #         "content": message,
+        #     },
+        # ]
+        
+        ,
         text_format=LLMResponse,
         max_output_tokens=max_output_tokens,
     )
@@ -139,23 +143,26 @@ async def call_model(
 # --------------------------------------------------
 
 async def stream_from_model(
-    message: str,
+    messages: list,
     model: str,
     max_output_tokens: int,
 ):
 
     async with client.responses.stream(
         model=model,
-        input=[
-            {
-                "role": "system",
-                "content": SYSTEM_INSTRUCTIONS,
-            },
-            {
-                "role": "user",
-                "content": message,
-            },
-        ],
+        input= messages,
+        
+        # [
+        #     {
+        #         "role": "system",
+        #         "content": SYSTEM_INSTRUCTIONS,
+        #     },
+        #     {
+        #         "role": "user",
+        #         "content": message,
+        #     },
+        # ],
+
         text_format=LLMResponse,
         max_output_tokens=max_output_tokens,
     ) as stream:
@@ -195,7 +202,7 @@ async def stream_from_model(
 # ==================================================
 
 async def generate_llm_response(
-    message: str,
+    messages: list,
     max_output_tokens: int = 1000,
 ) -> GenerateResponse:
 
@@ -220,7 +227,7 @@ async def generate_llm_response(
                 )
 
                 response = await call_model(
-                    message=message,
+                    messages=messages,
                     model=model,
                     max_output_tokens=max_output_tokens,
                 )
@@ -353,7 +360,7 @@ async def generate_llm_response(
 # ==================================================
 
 async def stream_llm_response(
-    message: str,
+    messages: list,
     max_output_tokens: int = 1000,
 ):
 
@@ -379,7 +386,7 @@ async def stream_llm_response(
                 )
 
                 async for event in stream_from_model(
-                    message=message,
+                    messages=messages,
                     model=model,
                     max_output_tokens=max_output_tokens,
                 ):
